@@ -1,0 +1,11 @@
+{
+  "name": "potentialcar",
+  "version": "1.0.0",
+  "description": "dummy API for potentialpark",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rama Sagala",
+  "license": "ISC"
+}
