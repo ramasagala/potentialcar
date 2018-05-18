@@ -3,7 +3,7 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
-var Car = require('./Car');
+var Car = require('../models/Car');
 
 // CREATES A NEW CAR
 router.post('/', function (req, res) {
