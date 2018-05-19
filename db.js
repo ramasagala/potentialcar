@@ -1,2 +1,4 @@
-var mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://publicadmin:publicadmin@cluster0-b0djk.mongodb.net/test?retryWrites=true');
+const mongoose = require("mongoose");
+const config = require("./config");
+
+mongoose.connect(config.mongodb.connection_string);

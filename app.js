@@ -1,8 +1,8 @@
-var express = require('express');
-var app = express();
-var db = require('./db');
+const express = require('express');
+const app = express();
+const db = require('./db');
 
-var CarController = require('./controllers/CarController');
+const CarController = require('./controllers/CarController');
 app.use('/cars', CarController);
 
 module.exports = app;

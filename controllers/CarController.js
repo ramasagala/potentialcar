@@ -9,8 +9,8 @@ var Car = require('../models/Car');
 router.post('/', function (req, res) {
     Car.create({
             name : req.body.name,
-            email : req.body.email,
-            password : req.body.password
+            status : req.body.status,
+            license_plate : req.body.license_plate
         }, 
         function (err, car) {
             if (err) return res.status(500).send("There was a problem adding the information to the database.");
@@ -43,10 +43,10 @@ router.delete('/:id', function (req, res) {
     });
 });
 
-// UPDATES A SINGLE USER IN THE DATABASE
+// UPDATES A SINGLE CAR IN THE DATABASE
 router.put('/:id', function (req, res) {
     
-    User.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, car) {
+    User.findByIdAndUpdate(req.params.id, req.body, {upsert: true}, function (err, car) {
         if (err) return res.status(500).send("There was a problem updating the car.");
         res.status(200).send(car);
     });
