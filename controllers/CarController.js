@@ -37,16 +37,16 @@ router.get('/:id', function (req, res) {
 
 // DELETES A CAR FROM THE DATABASE
 router.delete('/:id', function (req, res) {
-    User.findByIdAndRemove(req.params.id, function (err, car) {
+    Car.findByIdAndRemove(req.params.id, function (err, car) {
         if (err) return res.status(500).send("There was a problem deleting the car.");
-        res.status(200).send("User "+ car.name +" was deleted.");
+        res.status(200).send("Car "+ car.name +" was deleted.");
     });
 });
 
 // UPDATES A SINGLE CAR IN THE DATABASE
 router.put('/:id', function (req, res) {
     
-    User.findByIdAndUpdate(req.params.id, req.body, {upsert: true}, function (err, car) {
+    Car.findByIdAndUpdate(req.params.id, req.body, {upsert: true, new: true}, function (err, car) {
         if (err) return res.status(500).send("There was a problem updating the car.");
         res.status(200).send(car);
     });
