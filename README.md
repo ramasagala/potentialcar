@@ -3,8 +3,8 @@ Backend API to control the potential-car
 
 ## Setup
 ```
-$ git clone https://github.com/ramasagala/via-trailer.git
-$ cd via-trailer
+$ git clone https://github.com/ramasagala/potentialcar.git
+$ cd potentialcar
 $ npm install
 $ npm test
 $ npm start
