@@ -1,12 +1,16 @@
-var express = require('express');
-var router = express.Router();
-var bodyParser = require('body-parser');
-router.use(bodyParser.urlencoded({ extended: true }));
-router.use(bodyParser.json());
-var Car = require('../models/Car');
+const express = require('express');
+const carRouter = express.Router();
+const bodyParser = require('body-parser');
+carRouter.use(bodyParser.urlencoded({ extended: true }));
+carRouter.use(bodyParser.json());
+const Car = require('../models/Car');
+const CarSetting = require('../models/CarSetting');
+
+const settingRouter = express.Router({mergeParams: true});
+carRouter.use('/:id/settings', settingRouter);
 
 // CREATES A NEW CAR
-router.post('/', function (req, res) {
+carRouter.post('/', function (req, res) {
     Car.create({
             name : req.body.name,
             status : req.body.status,
@@ -15,11 +19,14 @@ router.post('/', function (req, res) {
         function (err, car) {
             if (err) return res.status(500).send("There was a problem adding the information to the database.");
             res.status(200).send(car);
+
+            // CREATE CAR SETTING
+            CarSetting.create({car_id: car._id});
         });
 });
 
 // RETURNS ALL THE CARS IN THE DATABASE
-router.get('/', function (req, res) {
+carRouter.get('/', function (req, res) {
     Car.find({}, function (err, cars) {
         if (err) return res.status(500).send("There was a problem finding the Cars.");
         res.status(200).send(cars);
@@ -27,7 +34,7 @@ router.get('/', function (req, res) {
 });
 
 // GETS A SINGLE CAR FROM THE DATABASE
-router.get('/:id', function (req, res) {
+carRouter.get('/:id', function (req, res) {
     Car.findById(req.params.id, function (err, car) {
         if (err) return res.status(500).send("There was a problem finding the car.");
         if (!car) return res.status(404).send("No car found.");
@@ -36,7 +43,7 @@ router.get('/:id', function (req, res) {
 });
 
 // DELETES A CAR FROM THE DATABASE
-router.delete('/:id', function (req, res) {
+carRouter.delete('/:id', function (req, res) {
     Car.findByIdAndRemove(req.params.id, function (err, car) {
         if (err) return res.status(500).send("There was a problem deleting the car.");
         res.status(200).send("Car "+ car.name +" was deleted.");
@@ -44,12 +51,27 @@ router.delete('/:id', function (req, res) {
 });
 
 // UPDATES A SINGLE CAR IN THE DATABASE
-router.put('/:id', function (req, res) {
-    
+carRouter.post('/:id', function (req, res) {    
     Car.findByIdAndUpdate(req.params.id, req.body, {upsert: true, new: true}, function (err, car) {
         if (err) return res.status(500).send("There was a problem updating the car.");
         res.status(200).send(car);
     });
 });
 
-module.exports = router;
+// GET A CAR SETTING
+settingRouter.get("/", function(req, res){
+    CarSetting.findOne({car_id: req.params.id}, function(err, setting){
+        if (err) return res.status(500).send("There was a problem getting the car setting.");
+        res.status(200).send(setting);
+    });
+});
+
+// UPDATES A CAR SETTING
+settingRouter.post("/", function(req, res){
+    CarSetting.findOneAndUpdate({car_id: req.params.id},req.body, {upsert: true, new: true}, function(err, setting){
+        if (err) return res.status(500).send("There was a problem updating the car setting.");
+        res.status(200).send(setting);
+    });
+});
+
+module.exports = carRouter;
